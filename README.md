@@ -29,10 +29,6 @@ You can install `napari-unicell` via [pip]:
 
 
 
-To install latest development version :
-
-    pip install git+https://github.com/JunMa11/napari-unicell.git
-
 
 ## Contributing
 
