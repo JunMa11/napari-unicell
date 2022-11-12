@@ -78,7 +78,7 @@ def load_model(model_name, custom_model_path):
             checkpoint = torch.load(join(os.path.dirname(__file__), 'work_dir/uninuclei/model.pth'), map_location=torch.device(device))
         else:
             os.makedirs(join(os.path.dirname(__file__), 'work_dir/uninuclei'), exist_ok=True)
-            torch.hub.download_url_to_file('https://zenodo.org/record/7308990/files/model.pth?download=1', join(os.path.dirname(__file__), 'work_dir/unicell/model.pth'))
+            torch.hub.download_url_to_file('https://zenodo.org/record/7308990/files/model.pth?download=1', join(os.path.dirname(__file__), 'work_dir/uninuclei/model.pth'))
             checkpoint = torch.load(join(os.path.dirname(__file__), 'work_dir/uninuclei/model.pth'), map_location=torch.device(device))
 
     model.load_state_dict(checkpoint['model_state_dict'])
@@ -152,15 +152,10 @@ def unicell_seg(pre_img_data, model_name, custom_model_path):
             test_pred_mask = seg_inst.squeeze().astype(np.int16)
         else:
             test_pred_mask = seg_inst.squeeze().astype(np.int64)
-        # # post processing
-        # for i in range(1, np.max(test_pred_mask)):
-        #     cell_inst_i = morphology.remove_small_holes(test_pred_mask==i)
-            
-        #     if np.sum(cell_inst_i)<16:
-        #         test_pred_mask[cell_inst_i] = 0
-    
-        test_pred_mask, _,_ = segmentation.relabel_sequential(test_pred_mask)   
         t1 = time.time()
+    
+        # test_pred_mask, _,_ = segmentation.relabel_sequential(test_pred_mask)   
+        
         bw_mask = np.uint8(test_pred_mask>0.2)
         print(f'Prediction finished; img size = {pre_img_data.shape}; costing: {t1-t0:.2f}s')
     show_info(f'Prediction finished; img size = {pre_img_data.shape}; costing: {t1-t0:.2f}s')
